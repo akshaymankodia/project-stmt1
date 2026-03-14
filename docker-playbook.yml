@@ -1,0 +1,25 @@
+---
+- hosts: testserver
+  become: yes
+
+  tasks:
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull Docker image
+      docker_container:
+        name: webserver
+        image: nginx
+        state: started
+        ports:
+          - "8080:80"
